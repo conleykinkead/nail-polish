@@ -1,0 +1,273 @@
+---
+title: "I Love Nail Polish"
+author: "Conley Kinkead"
+format: 
+  html: 
+    theme: 
+      - cosmo
+---
+
+![Showing off my collection in 2021 (edited)](images/so-many-polishes.png){alt="Showing off my collection in 2021 (edited)" fig-align="center"}
+
+## Project introduction
+
+I love nail polish. I love the colors, the finishes, the little glass bottles that I can display and organize. I love talking about nails, collecting nail polish, giving myself manicures, and mostly importantly, carrying joy with me everywhere I go (all I need to do is look down at my hands and see what makes me happy!)
+
+For most of my life, I've painted my nails using nail lacquers, but over the past couple months I have been learning how to do gel manicures. As such, lately I've amassed several gel polishes, soft gel extensions in various shapes and lengths (mostly coffin and stiletto), and many preparation, application, and gel removal tools.
+
+Things I will do with this project:
+
+-   create datasets of my gel nail polish and my lacquer nail polish, and then bind them into one larger data
+
+-   make a series of plots that provide information about my nail polish collection, such as:
+
+    -   color families
+
+    -   number of polishes acquired per year (since 2018)
+
+    -   finishes (crème, glitter, neon, etc)
+
+    -   my favorite brands
+
+![a rough starting sketch](images/2023_r-nailpolish.png){fig-align="center" width="400"}
+
+## Creating the datasets
+
+Because I have so many nail polishes, I created two datasets for this project and then combined them. The first data set consisted of gel polishes, and the second consisted of lacquers. I combined them using `rbind()`.
+
+```{r}
+library(tidyverse)
+library(ggrepel)
+library(patchwork)
+```
+
+```{r}
+library(showtext)
+font_add_google(name = "Mulish", family = "Mulish")
+showtext_auto()
+```
+
+```{r}
+nailpolish_gel <- data.frame (name = c("Freshwater (gel)", "Pooh Bear", "Pineapples Have Peelings Too", "Anything Goes (gel)", "Addicted to Sparkle", "Ruby Red Glitz", "Jade Platinum", "Mellow Yellow (gel)", "604", "Iconic", "Princess Jasmine (gel)", "618", "614", "615", "DG11", "Hidden Treasure", "Green to Café Latte", "Crystal Ball", "622", "611", "613", "616", "617", "612", "608", "619", "609", "607", "621", "620", "610", "603", "606", "605"),
+                         
+                          brand = c("iGel Beauty", "Aigel", "OPI", "Orly", "Aigel", "Nobility", "DND", "iGel Beauty", "Beetles", "Kiara Sky", "iGel Beauty", "Beetles", "Beetles", "Beetles", "Sumika", "Aigel", "DND", "Kiara Sky", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles", "Beetles"),
+                         
+                          color_family = c("blue", "multi", "yellow", "multi", "green", "maroon", "blue", "yellow", "pink", "blue", "green", "orange", "yellow", "pink", "blue", "multi", "mood", "mood", "pink", "pink", "green", "pink", "red", "blue", "yellow", "blue", "pink", "purple", "purple", "purple", "orange", "pink", "pink", "blue"),
+                          color_hex = c("#A9CFDC", "#BE969D", "#DEBB75", "#B9A3B1", "#A8C6BF", "#733566", "#4291C8", "#EFE669", "#F7C9B7", "#CEE6E2", "#6BA8A2", "#EB5328", "#E1F14F", "#E93C82", "#A2C0B8", "#CE9AA4", "#8FA260", "#799DC9", "#CFB19A", "#E6CAD6", "#69E258", "#EA526B", "#DF4126", "#98AFBC", "#FCEDBA", "#194584", "#DCB4E4", "#9793C9", "#A19AB7", "#603292", "#F1BAA2", "#EFDDE4", "#E0ABB1", "#AFE8E2"),
+                          
+                         year_acquired = c("2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022", "2022"),
+                         
+                         type = c("gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel", "gel"),
+                         
+                         finish = c("crème", "glitter", "glitter", "shimmer", "glitter", "glitter", "glitter", "crème", "crème", "crème", "crème", "neon", "neon", "neon", "iredescent", "glitter", "crème", "crème", "glitter", "glitter", "neon", "neon", "neon", "glitter", "crème", "neon", "crème", "crème", "glitter", "neon", "crème", "crème", "crème", "crème")
+)
+```
+
+```{r}
+nailpolish_laquer <- data.frame(
+    
+    name = c("Off Tropic", "Estatic Prismatic", "Cele-bert", "Emerald Sparkle", "Josie", "Aurora Borealis", "but first, candy", "Celtic Sun", "Chameleon", "Princess Jasmine (lacquer)", "Freshwater (lacquer)", "Surf's Up!", "Deliciously Wicked", "Seas the Day", "Miami Ice", "spun in luxe", "Aruba Blue", "Get Up", "Turn it Up", "Sun, Sea, and Sand in My Pants", "Mellow Yellow (lacquer)", "Taupe", "can't stop her in copper", "Master Plan", "One and the Same", "Kismet", "Cozu-Melted in the Sun", "bonbon nuit", "Desirable", "Uninhibited", "congrats", "Pick Me Up", "Magnetic", "Show Us Your Tips!", "sights on nightlights", "Grape Shifter", "Anything Goes (lacquer)", "White on White", "Soft Baked"),
+    
+    brand = c("essie", "OPI", "China Glaze", "China Glaze", "Zoya", "Mineral Fusion", "essie", "China Glaze", "Revlon", "iGel Beauty", "iGel Beauty", "Colors by Llarowe", "China Glaze", "Mineral Fusion", "Sally Hansen", "essie", "essie", "Bow", "Orly", "OPI", "iGel Beauty", "Mineral Fusion", "essie", "essie", "Emily de Molly", "Color Club", "OPI", "essie", "Revlon", "Revlon", "essie", "ILNP", "Revlon", "OPI", "essie", "Sally Hansen", "Orly", "China Glaze", "Color Club"),
+    
+    color_family = c("green", "green", "green", "green", "green", "green", "green", "green", "gold", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "brown", "multi", "yellow", "yellow", "neutral", "gold", "neutral", "orange", "gold", "pink", "pink", "pink", "red", "purple", "purple", "purple", "purple", "purple", "purple", "multi", "white", "multi"),
+    
+    color_hex = c("#20382F", "#81ADAF", "#AEB191", "#38775F", "#518B51", "#86A79C", "#337536", "#DDF868", "#726D49", "#6BA8A2", "#A9CFDC", "#436D8E", "#97ADBE", "#9DC5C6", "#65E0F7", "#494B53", "#0C3EC7", "#6A4631", "#A7283F", "#E1A93A", "#EFE669", "#958076", "#B6916D", "#AC9C94", "#D89164", "#CDCEB9", "#E1968F", "#DFD1D6", "#BF8D9D", "#AF4839", "#CCC9DB", "#B091CA", "#7464A7", "#A4B2DE", "#281528", "#5E578A", "#B9A3B1", "#FFFFFF", "#F9FBFA"),
+
+    year_acquired = c("2020", "2021", "2019", "2018", "2022", "2020", "2021", "2022", "2019", "2022", "2022", "2021", "2019", "2021", "2021", "2020", "2021", "2021", "2022", "2020", "2022", "2021", "2021", "2019", "2021", "2021", "2020", "2021", "2019", "2019", "2021", "2022", "2019", "2020", "2019", "2019", "2022", "2020", "2021"),
+    
+    type = c("lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer","lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer", "lacquer"),
+    
+    finish = c("crème", "shimmer", "glitter", "glitter", "crème", "shimmer", "glaze", "neon", "iredescent", "crème", "crème", "duochrome", "glitter", "crème", "neon", "satin", "shimmer", "magnetic", "topper", "crème", "crème", "pearl", "textured", "crème", "shimmer", "holographic", "shimmer", "iredescent", "shimmer", "shimmer", "glitter", "holographic", "glitter", "shimmer", "crème", "glitter", "shimmer", "crème", "shimmer")
+)
+```
+
+```{r}
+nailpolish <- rbind(nailpolish_gel, nailpolish_laquer)
+nailpolish$year_acquired <- as.numeric(as.character(nailpolish$year_acquired))
+sapply(nailpolish, class)
+```
+
+## Plots
+
+```{r}
+nailpolish |>
+  group_by(color_family) |>
+  mutate(n = row_number()) |>
+  ggplot(aes(color_family, n, fill = color_hex)) +
+    geom_raster() +
+    scale_fill_identity() +
+  labs(
+    y = "count",
+    x = "",
+    title = "colors by color family") +
+  scale_y_continuous(breaks = c(4, 8, 12)) +
+  theme(panel.background = element_rect(fill = "gray94"),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 15.5, family = "Mulish"),
+        axis.text.x = element_text(size = 9, color = "black", family = "Mulish"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 7, color = "gray20", family = "Mulish")
+        )
+```
+
+```{r}
+ggplot(nailpolish, aes(color_family, finish, fill = color_hex)) + 
+  stat_bin_2d() +
+    labs(
+    y = "",
+    x = "",
+    title = "finishes") +
+  theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 15.5, color = "gray20", family = "Mulish"),
+        axis.text.x = element_text(size = 7, color = "gray20", family = "Mulish"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 10, color = "gray20", family = "Mulish"),
+        ) +
+  scale_fill_identity()
+```
+
+```{r}
+ggplot(nailpolish, aes(x = color_family, y = reorder(brand, desc(brand)), fill = color_family)) + 
+  stat_bin_2d() +
+  scale_fill_manual(values = c("#4291C8", "#6A4631", "#B6916D", "#38775F", "#733566",   "#8FA260", "#CE9AA4", "#AC9C94", "#EB5328", "#E1968F", "#7464A7", "#DF4126", "white", "#EFE669")) + 
+  labs(
+    y = "",
+    x = "color family",
+    title = "brands") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 15.5, color = "gray20", family = "Mulish"),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 10, color = "gray20", family = "Mulish"),
+        axis.title.x = element_text(size = 10, color = "gray20", family = "Mulish"),
+        strip.background = element_rect(fill = "gray94"),
+        strip.text = element_text(size = 10, color = "gray20", family = "Mulish"),
+        legend.position = "none"
+        ) +
+facet_wrap(~type)
+```
+
+```{r}
+ggplot(nailpolish_laquer, aes(year_acquired, color_family, color = color_hex)) + 
+  geom_jitter(size = 5) +
+  scale_color_identity() +
+  labs(
+    y = "",
+    x = "year acquired",
+    title = "lacquer polish names") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 13, color = "gray20", family = "Mulish"),
+        axis.text.x = element_text(size = 10, color = "gray50", family = "Mulish"),
+        axis.ticks.x = element_line(color = "grey50"),
+        axis.title.x = element_text(size = 10, color = "gray50", family = "Mulish"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        legend.position = "none"
+        ) +
+    coord_cartesian(clip = "off") +
+geom_text_repel(aes(label = name), bg.color = "grey96", bg.r = .4)
+```
+
+```{r}
+ggplot(nailpolish_gel, aes(year_acquired, color_family, color = color_hex)) + 
+  geom_jitter(size = 5) +
+  scale_color_identity() +
+  labs(
+    y = "",
+    x = "all acquired in 2022",
+    title = "gel polish names") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 13, color = "gray20", family = "Mulish"),
+        axis.text.x = element_blank(),
+        axis.title.x = element_text(size = 10, color = "gray50", family = "Mulish"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        legend.position = "none"
+        ) +
+    coord_cartesian(clip = "off") +
+geom_text_repel(aes(label = name), bg.color = "grey96", bg.r = .7, max.overlaps = Inf)
+```
+
+```{r}
+acq1 <- ggplot(nailpolish, aes(year_acquired, color_family, color = color_hex)) + 
+  geom_jitter(size = 14) +
+  scale_color_identity() +
+  labs(
+    y = "",
+    x = "",
+    title = "colors acquired 2018-2022") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 13, color = "gray20", family = "Mulish"),
+        axis.text.x = element_text(size = 10, color = "gray50", family = "Mulish"),
+        axis.ticks.x = element_line(color = "grey50"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        legend.position = "none"
+        ) + coord_cartesian(clip = "off") 
+acq1
+```
+
+```{r}
+acq2 <- ggplot(nailpolish, aes(year_acquired, fill = color_hex)) + 
+  stat_bin(binwidth = 1, position = "fill") +
+  scale_fill_identity() +
+    labs(
+    y = "",
+    x = "",
+    title = "colors acquired 2018-2022") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 13, color = "gray20", family = "Mulish"),
+        axis.text.x = element_text(size = 10, color = "gray50", family = "Mulish"),
+        axis.ticks.x = element_line(color = "grey50"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        legend.position = "none"
+        )
+acq2
+```
+
+```{r}
+acq3 <- ggplot(nailpolish, aes(color_family, year_acquired, fill = color_family)) + 
+  geom_violin() +
+    scale_fill_manual(values = c("#4291C8", "#B6916D", "#38775F", "#733566", "#CE9AA4", "#AC9C94", "#EB5328", "#E1968F", "#7464A7", "#DF4126", "#EFE669")) + 
+  labs(
+    y = "",
+    x = "",
+    title = "colors acquired 2018-2022") +
+    theme(panel.background = element_rect(fill = "gray94"),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "gray94"),
+        plot.title = element_text(size = 13, color = "gray20", family = "Mulish"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 10, color = "gray20", family = "Mulish"),
+        legend.position = "none"
+        ) 
+acq3
+```
+
+## Evaluation, issues, and work for the future
+
+-   I chose to use the grey theming in hopes that it would showcase the colors representing the polishes. I think this worked out pretty well. I spent a lot of time tweaking axis titles, labels, and markers to make them readable but subtle.
+
+-   Again, for the most part, simple geometries were used to keep more focus on the colors.
+
+-   The ggrepel labels background should be changed based on the text color.
+
+-   I'd like to change the page theme so the background color is the same grey as the plot backgrounds. I'd like to match the fonts used in the plots to the ones on this page as well.
