@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Conley Kinkead">
+<meta name="dcterms.date" content="2023-02-11">
 
-<title>I Love Nail Polish</title>
+<title>plotting nail polish!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -138,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">I Love Nail Polish</h1>
+<h1 class="title">plotting nail polish!</h1>
 </div>
 
 
@@ -152,6 +153,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 11, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -159,14 +166,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/so-many-polishes.png" class="img-fluid figure-img" alt="Showing off my collection in 2021 (edited)"></p>
-<p></p><figcaption class="figure-caption">Showing off my collection in 2021 (edited)</figcaption><p></p>
-</figure>
-</div>
-<section id="project-introduction" class="level2">
-<h2 class="anchored" data-anchor-id="project-introduction">Project introduction</h2>
+<section id="project-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="project-introduction">project introduction</h3>
 <p>I love nail polish. I love the colors, the finishes, the little glass bottles that I can display and organize. I love talking about nails, collecting nail polish, giving myself manicures, and mostly importantly, carrying joy with me everywhere I go (all I need to do is look down at my hands and see what makes me happy!)</p>
 <p>For most of my life, I’ve painted my nails using nail lacquers, but over the past couple months I have been learning how to do gel manicures. As such, lately I’ve amassed several gel polishes, soft gel extensions in various shapes and lengths (mostly coffin and stiletto), and many preparation, application, and gel removal tools.</p>
 <p>Things I will do with this project:</p>
@@ -187,8 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </figure>
 </div>
 </section>
-<section id="creating-the-datasets" class="level2">
-<h2 class="anchored" data-anchor-id="creating-the-datasets">Creating the datasets</h2>
+<section id="creating-the-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-datasets">creating the datasets</h3>
 <p>Because I have so many nail polishes, I created two datasets for this project and then combined them. The first data set consisted of gel polishes, and the second consisted of lacquers. I combined them using <code>rbind()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -263,8 +264,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="plots" class="level2">
-<h2 class="anchored" data-anchor-id="plots">Plots</h2>
+<section id="plots" class="level3">
+<h3 class="anchored" data-anchor-id="plots">plots</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nailpolish <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(color_family) <span class="sc">|&gt;</span></span>
@@ -459,8 +460,8 @@ Groups with fewer than two data points have been dropped.</code></pre>
 </div>
 </div>
 </section>
-<section id="evaluation-issues-and-work-for-the-future" class="level2">
-<h2 class="anchored" data-anchor-id="evaluation-issues-and-work-for-the-future">Evaluation, issues, and work for the future</h2>
+<section id="evaluation-issues-and-work-for-the-future" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation-issues-and-work-for-the-future">evaluation, issues, and work for the future</h3>
 <ul>
 <li><p>I chose to use the grey theming in hopes that it would showcase the colors representing the polishes. I think this worked out pretty well. I spent a lot of time tweaking axis titles, labels, and markers to make them readable but subtle.</p></li>
 <li><p>Again, for the most part, simple geometries were used to keep more focus on the colors.</p></li>

@@ -1,15 +1,14 @@
 ---
-title: "I Love Nail Polish"
+title: "plotting nail polish!"
 author: "Conley Kinkead"
+date: 2023-02-11
 format: 
   html: 
     theme: 
       - cosmo
 ---
 
-![Showing off my collection in 2021 (edited)](images/so-many-polishes.png){alt="Showing off my collection in 2021 (edited)" fig-align="center"}
-
-## Project introduction
+### project introduction
 
 I love nail polish. I love the colors, the finishes, the little glass bottles that I can display and organize. I love talking about nails, collecting nail polish, giving myself manicures, and mostly importantly, carrying joy with me everywhere I go (all I need to do is look down at my hands and see what makes me happy!)
 
@@ -31,7 +30,7 @@ Things I will do with this project:
 
 ![a rough starting sketch](images/2023_r-nailpolish.png){fig-align="center" width="400"}
 
-## Creating the datasets
+### creating the datasets
 
 Because I have so many nail polishes, I created two datasets for this project and then combined them. The first data set consisted of gel polishes, and the second consisted of lacquers. I combined them using `rbind()`.
 
@@ -88,7 +87,7 @@ nailpolish$year_acquired <- as.numeric(as.character(nailpolish$year_acquired))
 sapply(nailpolish, class)
 ```
 
-## Plots
+### plots
 
 ```{r}
 nailpolish |>
@@ -262,7 +261,7 @@ acq3 <- ggplot(nailpolish, aes(color_family, year_acquired, fill = color_family)
 acq3
 ```
 
-## Evaluation, issues, and work for the future
+### evaluation, issues, and work for the future
 
 -   I chose to use the grey theming in hopes that it would showcase the colors representing the polishes. I think this worked out pretty well. I spent a lot of time tweaking axis titles, labels, and markers to make them readable but subtle.
 
